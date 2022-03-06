@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Threading;
 using UniRx.InternalUtil;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace UniRx
 {
@@ -120,9 +121,9 @@ namespace UniRx
 #if UNITY_2018_3_OR_NEWER
 #pragma warning disable CS0618
 #endif
-                    if (type == typeof(WWW))
+                    if (type == typeof(UnityWebRequestAsyncOperation))
                     {
-                        var www = (WWW)current;
+                        var www = (UnityWebRequestAsyncOperation)current;
                         editorQueueWorker.Enqueue(_ => ConsumeEnumerator(UnwrapWaitWWW(www, routine)), null);
                         return;
                     }
@@ -165,7 +166,7 @@ namespace UniRx
 #if UNITY_2018_3_OR_NEWER
 #pragma warning disable CS0618
 #endif
-            IEnumerator UnwrapWaitWWW(WWW www, IEnumerator continuation)
+            IEnumerator UnwrapWaitWWW(UnityWebRequestAsyncOperation www, IEnumerator continuation)
             {
                 while (!www.isDone)
                 {
@@ -436,17 +437,6 @@ namespace UniRx
                 return instance;
             }
         }
-
-#if UNITY_2019_3_OR_NEWER && UNITY_EDITOR
-        // Clean up static properties for times when Domain Reload is disabled.
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        static void DomainCleanup()
-        {
-            initialized = false;
-            isQuitting = false;
-            instance = null;
-        }
-#endif
 
         public static void Initialize()
         {
