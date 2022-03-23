@@ -9,7 +9,7 @@ using UniRx.InternalUtil;
 using UniRx.Triggers;
 using UnityEngine;
 using System.Threading;
-
+using UnityEngine.Networking;
 #if !UniRxLibrary
 using SchedulerUnity = UniRx.Scheduler;
 #endif
@@ -232,7 +232,7 @@ namespace UniRx
             #if UNITY_2018_3_OR_NEWER
 #pragma warning disable CS0618
 #endif
-            typeof(WWW),
+            typeof(UnityWebRequestAsyncOperation),
             #if UNITY_2018_3_OR_NEWER
 #pragma warning restore CS0618
 #endif
